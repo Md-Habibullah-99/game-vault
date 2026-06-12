@@ -1,122 +1,143 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState, useEffect } from "react";
+
+import LoginPage from "./pages/LoginPage";
+import Sidebar from "./components/sidebar";
+
+import HomePage from "./pages/HomePage";
+import { games } from "./data/games";
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    const [username, setUsername] =
+        useState("");
 
-      <div className="ticks"></div>
+    const [currentView, setCurrentView] =
+        useState("home");
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+    const [favorites, setFavorites] =
+        useState([]);
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    const [vault, setVault] =
+        useState([]);
+
+    const [selectedGame, setSelectedGame] =
+        useState(null);
+
+    useEffect(() => {
+
+        const savedUser =
+            localStorage.getItem("gv_user");
+
+        const savedFavorites =
+            localStorage.getItem("gv_favorites");
+
+        const savedVault =
+            localStorage.getItem("gv_vault");
+
+        if (savedUser) {
+            setUsername(savedUser);
+        }
+
+        if (savedFavorites) {
+            setFavorites(
+                JSON.parse(savedFavorites)
+            );
+        }
+
+        if (savedVault) {
+            setVault(
+                JSON.parse(savedVault)
+            );
+        }
+
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem(
+            "gv_favorites",
+            JSON.stringify(favorites)
+        );
+    }, [favorites]);
+
+    useEffect(() => {
+        localStorage.setItem(
+            "gv_vault",
+            JSON.stringify(vault)
+        );
+    }, [vault]);
+
+    const handleLogin = (name) => {
+
+        setUsername(name);
+
+        localStorage.setItem(
+            "gv_user",
+            name
+        );
+    };
+
+    const addToFavorites = (game) => {
+
+        const exists =
+            favorites.find(
+                g => g.id === game.id
+            );
+
+        if (!exists) {
+            setFavorites([
+                ...favorites,
+                game
+            ]);
+        }
+    };
+
+    const addToVault = (game) => {
+
+        const exists =
+            vault.find(
+                g => g.id === game.id
+            );
+
+        if (!exists) {
+            setVault([
+                ...vault,
+                game
+            ]);
+        }
+    };
+
+    if (!username) {
+        return (
+            <LoginPage
+                onLogin={handleLogin}
+            />
+        );
+    }
+
+    return (
+        <div className="min-h-screen bg-[#050710] text-slate-100">
+            <div className="flex min-h-screen w-full gap-6 px-4 py-8 lg:px-10">
+                <Sidebar
+                    currentView={currentView}
+                    setCurrentView={setCurrentView}
+                    favoritesCount={favorites.length}
+                    vaultCount={vault.length}
+                />
+
+                <main className="flex-1 min-w-0 rounded-[32px] border border-slate-800/80 bg-[#091428]/90 p-6 shadow-[0_30px_90px_-42px_rgba(0,0,0,0.75)] backdrop-blur-xl">
+                    {currentView === "home" && (
+                        <HomePage
+                            username={username}
+                            games={games}
+                            onAddFavorite={addToFavorites}
+                            onAddVault={addToVault}
+                            onViewDetails={setSelectedGame}
+                        />
+                    )}
+                </main>
+            </div>
+        </div>
+    );
 }
 
-export default App
+export default App;
