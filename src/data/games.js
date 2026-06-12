@@ -9,7 +9,7 @@ export const games = [
     publisher: "Ubisoft",
     developer: "Ubisoft Montreal",
     esrb: "M",
-    image: "src/assets/farcry3.jpg",
+    image: new URL("../assets/farcry3.jpg", import.meta.url).href,
     description: "Beyond the reach of civilization lies a lawless island ruled by absolute violence and psychotic warlords.",
     reqs: {
       os: "Windows 10",
@@ -30,7 +30,7 @@ export const games = [
     publisher: "CD Projekt",
     developer: "CD Projekt Red",
     esrb: "M",
-    image: "src/assets/cyberpunk.jpg",
+    image: new URL("../assets/cyberpunk.jpg", import.meta.url).href,
     description: "Night City is a megalopolis obsessed with power, glamour and body modification. Become V and explore a neon future.",
     reqs: {
       os: "Windows 11",
@@ -51,7 +51,7 @@ export const games = [
     publisher: "Sony Interactive",
     developer: "Santa Monica Studio",
     esrb: "M",
-    image: "src/assets/godOfWar.jpg",
+    image: new URL("../assets/godOfWar.jpg", import.meta.url).href,
     description: "His vengeance against the Gods of Olympus years behind him, Kratos now lives as a man in the realm of Norse Gods.",
     reqs: {
       os: "Windows 10",
@@ -72,7 +72,7 @@ export const games = [
     publisher: "Bandai Namco",
     developer: "FromSoftware",
     esrb: "M",
-    image: "src/assets/eldenring.jpg",
+    image: new URL("../assets/eldenring.jpg", import.meta.url).href,
     description: "Rise, Tarnished, and be led by grace to brandish the power of the Elden Ring and become an Elden Lord.",
     reqs: {
       os: "Windows 10",
@@ -93,7 +93,7 @@ export const games = [
     publisher: "Rockstar Games",
     developer: "Rockstar Studios",
     esrb: "M",
-    image: "src/assets/rdr2.jpg",
+    image: new URL("../assets/rdr2.jpg", import.meta.url).href,
     description: "Arthur Morgan and the Van der Linde gang are outlaws on the run. Fight your way across the heartland of America.",
     reqs: {
       os: "Windows 10",
@@ -114,7 +114,7 @@ export const games = [
     publisher: "Sony Interactive",
     developer: "Insomniac Games",
     esrb: "T",
-    image: "src/assets/spiderman.jpg",
+    image: new URL("../assets/spiderman.jpg", import.meta.url).href,
     description: "In Marvel’s Spider-Man Remastered, the worlds of Peter Parker and Spider-Man collide in an original story.",
     reqs: {
       os: "Windows 10",
@@ -135,7 +135,7 @@ export const games = [
     publisher: "Capcom",
     developer: "Capcom",
     esrb: "M",
-    image: "src/assets/reVillage.jpg",
+    image: new URL("../assets/reVillage.jpg", import.meta.url).href,
     description: "Experience survival horror like never before in the eighth major installment in the Resident Evil franchise.",
     reqs: {
       os: "Windows 10",
@@ -156,7 +156,7 @@ export const games = [
     publisher: "Bethesda",
     developer: "id Software",
     esrb: "M",
-    image: "src/assets/doomEthernal.jpg",
+    image: new URL("../assets/doomEthernal.jpg", import.meta.url).href,
     description: "Hell’s armies have invaded Earth. Become the Slayer in an epic campaign to conquer demons across dimensions.",
     reqs: {
       os: "Windows 10",
@@ -177,7 +177,7 @@ export const games = [
     publisher: "Mojang",
     developer: "Mojang Studios",
     esrb: "E",
-    image: "src/assets/Minecraft.jpg",
+    image: new URL("../assets/Minecraft.jpg", import.meta.url).href,
     description: "Explore infinite worlds and build everything from the simplest of homes to the grandest of castles.",
     reqs: {
       os: "Win 7+",
@@ -198,7 +198,7 @@ export const games = [
     publisher: "Xbox Game Studios",
     developer: "Playground Games",
     esrb: "E",
-    image: "src/assets/forzaHorizon5.jpg",
+    image: new URL("../assets/forzaHorizon5.jpg", import.meta.url).href,
     description: "Your ultimate Horizon Adventure awaits! Lead breathtaking expeditions across the vibrant landscapes of Mexico.",
     reqs: {
       os: "Windows 10",
@@ -219,7 +219,7 @@ export const games = [
     publisher: "Sony Interactive",
     developer: "Naughty Dog",
     esrb: "M",
-    image: "src/assets/lastOfUsP1.jpg",
+    image: new URL("../assets/lastOfUsP1.jpg", import.meta.url).href,
     description: "A sweeping cinematic adventure where Joel and Ellie fight to survive in a hostile, post-pandemic world.",
     reqs: {
       os: "Windows 10",
@@ -240,7 +240,7 @@ export const games = [
     publisher: "Ubisoft",
     developer: "Ubisoft Montreal",
     esrb: "M",
-    image: "src/assets/Assassins-Creed-Valhalla.avif",
+    image: new URL("../assets/Assassins-Creed-Valhalla.avif", import.meta.url).href,
     description: "Become Eivor, a legendary Viking raider. Explore England's Dark Ages as you raid your enemies.",
     reqs: {
       os: "Windows 10",
@@ -261,7 +261,7 @@ export const games = [
     publisher: "Riot Games",
     developer: "Riot Games",
     esrb: "T",
-    image: "src/assets/valorant.jpg",
+    image: new URL("../assets/valorant.jpg", import.meta.url).href,
     description: "A character-based 5v5 tactical shooter where precise gunplay meets unique agent abilities.",
     reqs: {
       os: "Windows 10",
@@ -282,7 +282,7 @@ export const games = [
     publisher: "Sony Interactive",
     developer: "Sucker Punch",
     esrb: "M",
-    image: "src/assets/ghost-of-tsushima.jpg",
+    image: new URL("../assets/ghost-of-tsushima.jpg", import.meta.url).href,
     description: "Jin Sakai must embrace the way of the Ghost to protect Tsushima from the invading Mongol forces.",
     reqs: {
       os: "Windows 10",
@@ -303,7 +303,7 @@ export const games = [
     publisher: "EA",
     developer: "Respawn",
     esrb: "T",
-    image: "src/assets/apexLegends.jpg",
+    image: new URL("../assets/apexLegends.jpg", import.meta.url).href,
     description: "Conquer with character in Apex Legends, a free-to-play hero shooter where legendary combatants fight for glory.",
     reqs: {
       os: "Windows 7+",
@@ -324,7 +324,7 @@ export const games = [
     publisher: "Activision",
     developer: "FromSoftware",
     esrb: "M",
-    image: "src/assets/sekiro.jpg",
+    image: new URL("../assets/sekiro.jpg", import.meta.url).href,
     description: "Carve your own clever path to vengeance in the award-winning adventure from developer FromSoftware.",
     reqs: {
       os: "Windows 10",
@@ -345,7 +345,7 @@ export const games = [
     publisher: "CD Projekt",
     developer: "CD Projekt Red",
     esrb: "M",
-    image: "src/assets/witcher3.webp",
+    image: new URL("../assets/witcher3.webp", import.meta.url).href,
     description: "As monster hunter Geralt of Rivia, track down the Child of Prophecy in the vast, war-torn Continent.",
     reqs: {
       os: "Windows 10",
@@ -366,7 +366,7 @@ export const games = [
     publisher: "EA",
     developer: "DICE",
     esrb: "M",
-    image: "src/assets/battlefield2042.jpg",
+    image: new URL("../assets/battlefield2042.jpg", import.meta.url).href,
     description: "Battlefield 2042 is a first-person shooter that marks the return to the iconic all-out warfare of the franchise.",
     reqs: {
       os: "Windows 10",
@@ -387,7 +387,7 @@ export const games = [
     publisher: "Supergiant Games",
     developer: "Supergiant Games",
     esrb: "T",
-    image: "src/assets/hades.jpg",
+    image: new URL("../assets/hades.jpg", import.meta.url).href,
     description: "Defy the god of the dead as you hack and slash out of the Underworld in this rogue-like dungeon crawler.",
     reqs: {
       os: "Windows 7",
@@ -408,7 +408,7 @@ export const games = [
     publisher: "Bethesda",
     developer: "Bethesda Games",
     esrb: "M",
-    image: "src/assets/starfield.jpg",
+    image: new URL("../assets/starfield.jpg", import.meta.url).href,
     description: "Starfield is the first new universe in over 25 years from Bethesda Game Studios, the creators of Skyrim.",
     reqs: {
       os: "Windows 10",
