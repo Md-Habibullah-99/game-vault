@@ -1,79 +1,43 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import LoginPage from "./pages/LoginPage";
 import Sidebar from "./components/sidebar";
+import MobileNav from "./components/MobileNav";
 
 import HomePage from "./pages/HomePage";
+import FavoritesPage from "./pages/FavoritesPage";
+import VaultPage from "./pages/VaultPage";
+import DetailsPage from "./pages/DetailsPage";
+import useLocalStorage from "./hooks/useLocalStorage";
 import { games } from "./data/games";
 
 function App() {
 
     const [username, setUsername] =
-        useState("");
+        useLocalStorage("gv_user", "");
 
     const [currentView, setCurrentView] =
         useState("home");
 
     const [favorites, setFavorites] =
-        useState([]);
+        useLocalStorage("gv_favorites", []);
 
     const [vault, setVault] =
-        useState([]);
+        useLocalStorage("gv_vault", []);
 
     const [selectedGame, setSelectedGame] =
         useState(null);
 
-    useEffect(() => {
-
-        const savedUser =
-            localStorage.getItem("gv_user");
-
-        const savedFavorites =
-            localStorage.getItem("gv_favorites");
-
-        const savedVault =
-            localStorage.getItem("gv_vault");
-
-        if (savedUser) {
-            setUsername(savedUser);
-        }
-
-        if (savedFavorites) {
-            setFavorites(
-                JSON.parse(savedFavorites)
-            );
-        }
-
-        if (savedVault) {
-            setVault(
-                JSON.parse(savedVault)
-            );
-        }
-
-    }, []);
-
-    useEffect(() => {
-        localStorage.setItem(
-            "gv_favorites",
-            JSON.stringify(favorites)
-        );
-    }, [favorites]);
-
-    useEffect(() => {
-        localStorage.setItem(
-            "gv_vault",
-            JSON.stringify(vault)
-        );
-    }, [vault]);
-
     const handleLogin = (name) => {
 
         setUsername(name);
+    };
 
-        localStorage.setItem(
-            "gv_user",
-            name
-        );
+    const handleLogout = () => {
+
+        setUsername("");
+        setCurrentView("home");
+        setSelectedGame(null);
     };
 
     const addToFavorites = (game) => {
@@ -116,23 +80,62 @@ function App() {
 
     return (
         <div className="min-h-screen bg-[#050710] text-slate-100">
-            <div className="flex min-h-screen w-full gap-6 px-4 py-8 lg:px-10">
+            <div className="flex min-h-screen w-full flex-col gap-6 px-3 py-4 sm:px-4 sm:py-6 lg:flex-row lg:px-10 lg:py-8">
                 <Sidebar
+                    username={username}
                     currentView={currentView}
                     setCurrentView={setCurrentView}
                     favoritesCount={favorites.length}
                     vaultCount={vault.length}
+                    onLogout={handleLogout}
                 />
 
-                <main className="flex-1 min-w-0 rounded-[32px] border border-slate-800/80 bg-[#091428]/90 p-6 shadow-[0_30px_90px_-42px_rgba(0,0,0,0.75)] backdrop-blur-xl">
-                    {currentView === "home" && (
-                        <HomePage
+                <main className="flex-1 min-w-0 rounded-3xl border border-slate-800/80 bg-[#091428]/90 p-4 shadow-[0_30px_90px_-42px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:rounded-4xl sm:p-6">
+                    {selectedGame ? (
+                        <DetailsPage
+                            game={selectedGame}
                             username={username}
-                            games={games}
-                            onAddFavorite={addToFavorites}
-                            onAddVault={addToVault}
-                            onViewDetails={setSelectedGame}
+                            onBack={() => setSelectedGame(null)}
                         />
+                    ) : (
+                        <>
+                            <div className="mb-6 xl:hidden">
+                                <MobileNav
+                                    username={username}
+                                    currentView={currentView}
+                                    setCurrentView={setCurrentView}
+                                    onLogout={handleLogout}
+                                />
+                            </div>
+
+                            {currentView === "home" && (
+                                <HomePage
+                                    username={username}
+                                    games={games}
+                                    onAddFavorite={addToFavorites}
+                                    onAddVault={addToVault}
+                                    onViewDetails={setSelectedGame}
+                                />
+                            )}
+
+                            {currentView === "favorites" && (
+                                <FavoritesPage
+                                    favorites={favorites}
+                                    onViewDetails={setSelectedGame}
+                                    onAddFavorite={addToFavorites}
+                                    onAddVault={addToVault}
+                                />
+                            )}
+
+                            {currentView === "vault" && (
+                                <VaultPage
+                                    vault={vault}
+                                    onViewDetails={setSelectedGame}
+                                    onAddFavorite={addToFavorites}
+                                    onAddVault={addToVault}
+                                />
+                            )}
+                        </>
                     )}
                 </main>
             </div>

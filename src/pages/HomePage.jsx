@@ -48,8 +48,7 @@ function HomePage({
             const matchesStatus =
                 selectedStatus === "All"
                 ||
-                game.status ===
-                selectedStatus;
+                (game.status && game.status === selectedStatus);
 
             return (
                 matchesSearch

@@ -9,7 +9,7 @@ export const games = [
     publisher: "Ubisoft",
     developer: "Ubisoft Montreal",
     esrb: "M",
-    image: "https://i.ibb.co/Nn6q5MBq/farcry3.jpg",
+    image: new URL("../assets/farcry3.jpg", import.meta.url).href,
     description: "Beyond the reach of civilization lies a lawless island ruled by absolute violence and psychotic warlords.",
     reqs: {
       os: "Windows 10",
