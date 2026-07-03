@@ -1,8 +1,9 @@
-export const games = [
+const rawGames = [
   {
     id: 1,
     title: "Far Cry 3",
     genre: "First-Person Shooter",
+    status: "Played",
     rating: 9.2,
     platform: "PC / PS3 / Xbox 360",
     year: 2012,
@@ -24,6 +25,7 @@ export const games = [
     id: 2,
     title: "Cyberpunk 2077",
     genre: "Action RPG",
+    status: "Playing",
     rating: 8.8,
     platform: "PC / PS5 / PS4 / Xbox Series X / Xbox One",
     year: 2020,
@@ -45,6 +47,7 @@ export const games = [
     id: 3,
     title: "God of War",
     genre: "Action-Adventure",
+    status: "Played",
     rating: 9.8,
     platform: "PS4 / PS5 / PC",
     year: 2018,
@@ -66,6 +69,7 @@ export const games = [
     id: 4,
     title: "Elden Ring",
     genre: "Open-World Action RPG",
+    status: "Playing",
     rating: 9.9,
     platform: "PC / PS5 / PS4 / Xbox Series X / Xbox One",
     year: 2022,
@@ -87,6 +91,7 @@ export const games = [
     id: 5,
     title: "Red Dead Redemption 2",
     genre: "Action-Adventure",
+    status: "Played",
     rating: 9.7,
     platform: "PC / PS4 / Xbox One / PS5 / Xbox Series X",
     year: 2018,
@@ -108,6 +113,7 @@ export const games = [
     id: 6,
     title: "Spider-Man Remastered",
     genre: "Action-Adventure",
+    status: "Wishlist",
     rating: 9.4,
     platform: "PC / PS5",
     year: 2022,
@@ -129,6 +135,7 @@ export const games = [
     id: 7,
     title: "Resident Evil Village",
     genre: "Survival Horror",
+    status: "Played",
     rating: 9.1,
     platform: "PC / PS5 / PS4 / Xbox Series X / Xbox One",
     year: 2021,
@@ -150,6 +157,7 @@ export const games = [
     id: 8,
     title: "Doom Eternal",
     genre: "First-Person Shooter",
+    status: "Playing",
     rating: 9.5,
     platform: "PC / PS5 / PS4 / Xbox Series X / Xbox One / Nintendo Switch",
     year: 2020,
@@ -171,6 +179,7 @@ export const games = [
     id: 9,
     title: "Minecraft",
     genre: "Sandbox",
+    status: "Played",
     rating: 9.0,
     platform: "PC / PS4 / PS5 / Xbox One / Xbox Series X / Switch / Mobile",
     year: 2011,
@@ -192,6 +201,7 @@ export const games = [
     id: 10,
     title: "Forza Horizon 5",
     genre: "Racing",
+    status: "Wishlist",
     rating: 9.2,
     platform: "PC / Xbox Series X / Xbox One",
     year: 2021,
@@ -213,6 +223,7 @@ export const games = [
     id: 11,
     title: "The Last of Us Part I",
     genre: "Action-Adventure",
+    status: "Played",
     rating: 9.5,
     platform: "PS5 / PC",
     year: 2022,
@@ -234,6 +245,7 @@ export const games = [
     id: 12,
     title: "Assassin's Creed Valhalla",
     genre: "Action RPG",
+    status: "Playing",
     rating: 8.4,
     platform: "PC / PS4 / PS5 / Xbox One / Xbox Series X",
     year: 2020,
@@ -255,6 +267,7 @@ export const games = [
     id: 13,
     title: "Valorant",
     genre: "Tactical FPS",
+    status: "Playing",
     rating: 8.2,
     platform: "PC",
     year: 2020,
@@ -276,6 +289,7 @@ export const games = [
     id: 14,
     title: "Ghost of Tsushima",
     genre: "Action-Adventure",
+    status: "Wishlist",
     rating: 9.6,
     platform: "PS4 / PS5 / PC",
     year: 2020,
@@ -297,6 +311,7 @@ export const games = [
     id: 15,
     title: "Apex Legends",
     genre: "Battle Royale Shooter",
+    status: "Playing",
     rating: 8.7,
     platform: "PC / PS4 / PS5 / Xbox One / Xbox Series X / Switch",
     year: 2019,
@@ -318,6 +333,7 @@ export const games = [
     id: 16,
     title: "Sekiro: Shadows Die Twice",
     genre: "Souls-like",
+    status: "Wishlist",
     rating: 9.5,
     platform: "PC / PS4 / Xbox One",
     year: 2019,
@@ -339,6 +355,7 @@ export const games = [
     id: 17,
     title: "The Witcher 3",
     genre: "Action RPG",
+    status: "Played",
     rating: 9.6,
     platform: "PC / PS4 / Xbox One / Switch",
     year: 2015,
@@ -360,6 +377,7 @@ export const games = [
     id: 18,
     title: "Battlefield 2042",
     genre: "FPS",
+    status: "Playing",
     rating: 7.0,
     platform: "PC / PS4 / PS5 / Xbox One / Xbox Series X",
     year: 2021,
@@ -381,6 +399,7 @@ export const games = [
     id: 19,
     title: "Hades",
     genre: "Rogue-like",
+    status: "Played",
     rating: 9.7,
     platform: "PC / Switch / PS4 / PS5 / Xbox One / Xbox Series X",
     year: 2020,
@@ -402,6 +421,7 @@ export const games = [
     id: 20,
     title: "Starfield",
     genre: "Action RPG",
+    status: "Wishlist",
     rating: 8.3,
     platform: "PC / Xbox Series X / Xbox One",
     year: 2023,
@@ -420,3 +440,31 @@ export const games = [
     playtime: "150h"
   }
 ];
+
+const GENRE_ALIASES = {
+  FPS: ["First-Person Shooter"],
+  "First-Person Shooter": ["First-Person Shooter"],
+  "Tactical FPS": ["First-Person Shooter", "Tactical Shooter"],
+  "Battle Royale Shooter": ["First-Person Shooter", "Battle Royale"],
+  "Action-Adventure": ["Action", "Adventure"],
+  "Action RPG": ["Action", "RPG"],
+  "Open-World Action RPG": ["Open World", "Action", "RPG"],
+  "Survival Horror": ["Horror", "Survival"],
+  "Souls-like": ["Action", "RPG", "Souls-like"],
+  "Rogue-like": ["Action", "Rogue-like"]
+};
+
+function normalizeGenres(genre) {
+  const mapped = GENRE_ALIASES[genre] || [genre];
+  return [...new Set(mapped)];
+}
+
+export const games = rawGames.map((game) => {
+  const genres = normalizeGenres(game.genre);
+
+  return {
+    ...game,
+    genre: genres[0],
+    genres
+  };
+});

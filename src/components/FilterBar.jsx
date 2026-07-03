@@ -1,4 +1,6 @@
 function FilterBar({
+    genres,
+    statuses,
     selectedGenre,
     setSelectedGenre,
     selectedStatus,
@@ -13,12 +15,9 @@ function FilterBar({
                 className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-slate-100 outline-none transition focus:border-[#00F5FF] focus:ring-2 focus:ring-[#00F5FF]/20"
             >
                 <option value="All">All Genres</option>
-                <option value="FPS">FPS</option>
-                <option value="RPG">RPG</option>
-                <option value="Action">Action</option>
-                <option value="Adventure">Adventure</option>
-                <option value="Horror">Horror</option>
-                <option value="Open World">Open World</option>
+                {genres.map((genre) => (
+                    <option key={genre} value={genre}>{genre}</option>
+                ))}
             </select>
 
             <select
@@ -27,9 +26,9 @@ function FilterBar({
                 className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-slate-100 outline-none transition focus:border-[#00F5FF] focus:ring-2 focus:ring-[#00F5FF]/20"
             >
                 <option value="All">All Status</option>
-                <option value="Played">Played</option>
-                <option value="Playing">Playing</option>
-                <option value="Wishlist">Wishlist</option>
+                {statuses.map((status) => (
+                    <option key={status} value={status}>{status}</option>
+                ))}
             </select>
         </div>
     );

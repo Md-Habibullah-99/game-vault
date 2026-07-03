@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import LoginPage from "./pages/LoginPage";
 import Sidebar from "./components/sidebar";
@@ -8,69 +8,326 @@ import HomePage from "./pages/HomePage";
 import FavoritesPage from "./pages/FavoritesPage";
 import VaultPage from "./pages/VaultPage";
 import DetailsPage from "./pages/DetailsPage";
-import useLocalStorage from "./hooks/useLocalStorage";
 import { games } from "./data/games";
+import {
+    clearSessionUser,
+    getAccountByUsername,
+    getFavoritesStorageKey,
+    getGameMetaStorageKey,
+    getSessionUser,
+    getVaultStorageKey,
+    setSessionUser
+} from "./utils/auth";
+
+const NAV_STATE_KEY = "gvNavigation";
+
+function createNavState(view, gameId = null) {
+    return {
+        [NAV_STATE_KEY]: true,
+        view,
+        gameId
+    };
+}
+
+function isAppNavState(state) {
+    return Boolean(state && state[NAV_STATE_KEY]);
+}
 
 function App() {
 
-    const [username, setUsername] =
-        useLocalStorage("gv_user", "");
+    const [account, setAccount] =
+        useState(() => {
+            const sessionUsername = getSessionUser();
+            return getAccountByUsername(sessionUsername);
+        });
 
     const [currentView, setCurrentView] =
         useState("home");
 
-    const [favorites, setFavorites] =
-        useLocalStorage("gv_favorites", []);
+    const [favorites, setFavorites] = useState([]);
 
-    const [vault, setVault] =
-        useLocalStorage("gv_vault", []);
+    const [vault, setVault] = useState([]);
 
     const [selectedGame, setSelectedGame] =
         useState(null);
 
-    const handleLogin = (name) => {
+    const [gameMetaById, setGameMetaById] =
+        useState({});
 
-        setUsername(name);
+    const [collectionsLoaded, setCollectionsLoaded] =
+        useState(false);
+
+    const [metaLoaded, setMetaLoaded] =
+        useState(false);
+
+    const username = useMemo(
+        () => account?.displayName || account?.username || "",
+        [account]
+    );
+
+    const mergedGames = useMemo(
+        () => games.map((game) => {
+            const meta = gameMetaById[game.id] || {};
+
+            return {
+                ...game,
+                status: meta.status || game.status,
+                playtime: meta.playtime || game.playtime
+            };
+        }),
+        [gameMetaById]
+    );
+
+    const favoriteIds = useMemo(
+        () => new Set(favorites.map((game) => game.id)),
+        [favorites]
+    );
+
+    const vaultIds = useMemo(
+        () => new Set(vault.map((game) => game.id)),
+        [vault]
+    );
+
+    const applyNavigationState = (state) => {
+        const nextView = state?.view || "home";
+        const nextGame = state?.gameId
+            ? mergedGames.find((game) => game.id === state.gameId) || null
+            : null;
+
+        setCurrentView(nextView);
+        setSelectedGame(nextGame);
+    };
+
+    const navigateToView = (view, options = {}) => {
+        const { replace = false, fromPopState = false } = options;
+        const state = createNavState(view, null);
+
+        applyNavigationState(state);
+
+        if (account?.username && !fromPopState) {
+            if (replace) {
+                window.history.replaceState(state, "");
+            } else {
+                window.history.pushState(state, "");
+            }
+        }
+    };
+
+    const openDetailsView = (game, options = {}) => {
+        const { fromPopState = false } = options;
+        const state = createNavState(currentView, game.id);
+
+        applyNavigationState(state);
+
+        if (account?.username && !fromPopState) {
+            window.history.pushState(state, "");
+        }
+    };
+
+    const goBackFromDetails = () => {
+        if (isAppNavState(window.history.state)) {
+            window.history.back();
+            return;
+        }
+
+        const fallback = createNavState(currentView, null);
+        applyNavigationState(fallback);
+        window.history.replaceState(fallback, "");
+    };
+
+    useEffect(() => {
+        if (!account?.username) {
+            setFavorites([]);
+            setVault([]);
+            setGameMetaById({});
+            setCollectionsLoaded(false);
+            setMetaLoaded(false);
+            return;
+        }
+
+        const favoritesKey = getFavoritesStorageKey(account.username);
+        const vaultKey = getVaultStorageKey(account.username);
+
+        try {
+            const storedFavorites = localStorage.getItem(favoritesKey);
+            const storedVault = localStorage.getItem(vaultKey);
+            setFavorites(storedFavorites ? JSON.parse(storedFavorites) : []);
+            setVault(storedVault ? JSON.parse(storedVault) : []);
+        } catch {
+            setFavorites([]);
+            setVault([]);
+        }
+
+        setCollectionsLoaded(true);
+    }, [account]);
+
+    useEffect(() => {
+        if (!account?.username || !collectionsLoaded) {
+            return;
+        }
+
+        localStorage.setItem(
+            getFavoritesStorageKey(account.username),
+            JSON.stringify(favorites)
+        );
+    }, [account, favorites, collectionsLoaded]);
+
+    useEffect(() => {
+        if (!account?.username || !collectionsLoaded) {
+            return;
+        }
+
+        localStorage.setItem(
+            getVaultStorageKey(account.username),
+            JSON.stringify(vault)
+        );
+    }, [account, vault, collectionsLoaded]);
+
+    useEffect(() => {
+        if (!account?.username) {
+            return;
+        }
+
+        try {
+            const rawMeta = localStorage.getItem(getGameMetaStorageKey(account.username));
+            setGameMetaById(rawMeta ? JSON.parse(rawMeta) : {});
+        } catch {
+            setGameMetaById({});
+        }
+
+        setMetaLoaded(true);
+    }, [account]);
+
+    useEffect(() => {
+        if (!account?.username || !metaLoaded) {
+            return;
+        }
+
+        localStorage.setItem(
+            getGameMetaStorageKey(account.username),
+            JSON.stringify(gameMetaById)
+        );
+    }, [account, gameMetaById, metaLoaded]);
+
+    useEffect(() => {
+        if (!account?.username) {
+            return;
+        }
+
+        const state = window.history.state;
+
+        if (isAppNavState(state)) {
+            applyNavigationState(state);
+        } else {
+            window.history.replaceState(createNavState("home", null), "");
+        }
+
+        const onPopState = (event) => {
+            if (!isAppNavState(event.state)) {
+                return;
+            }
+
+            applyNavigationState(event.state);
+        };
+
+        window.addEventListener("popstate", onPopState);
+
+        return () => {
+            window.removeEventListener("popstate", onPopState);
+        };
+    }, [account, mergedGames]);
+
+    useEffect(() => {
+        if (!selectedGame?.id) {
+            return;
+        }
+
+        const nextSelectedGame = mergedGames.find((game) => game.id === selectedGame.id) || null;
+        if (nextSelectedGame) {
+            setSelectedGame(nextSelectedGame);
+        }
+    }, [mergedGames, selectedGame?.id]);
+
+    const handleLogin = (loggedInAccount) => {
+
+        setAccount(loggedInAccount);
+        setSessionUser(loggedInAccount.username);
+        window.history.replaceState(createNavState("home", null), "");
+        applyNavigationState(createNavState("home", null));
     };
 
     const handleLogout = () => {
 
-        setUsername("");
+        clearSessionUser();
+        setAccount(null);
         setCurrentView("home");
         setSelectedGame(null);
     };
 
     const addToFavorites = (game) => {
 
-        const exists =
-            favorites.find(
-                g => g.id === game.id
-            );
+        setFavorites((prev) => {
+            const exists = prev.find(g => g.id === game.id);
+            return exists ? prev : [...prev, game];
+        });
+    };
 
-        if (!exists) {
-            setFavorites([
-                ...favorites,
-                game
-            ]);
-        }
+    const removeFromFavorites = (gameId) => {
+
+        setFavorites((prev) => prev.filter(game => game.id !== gameId));
     };
 
     const addToVault = (game) => {
 
-        const exists =
-            vault.find(
-                g => g.id === game.id
-            );
-
-        if (!exists) {
-            setVault([
-                ...vault,
-                game
-            ]);
-        }
+        setVault((prev) => {
+            const exists = prev.find(g => g.id === game.id);
+            return exists ? prev : [...prev, game];
+        });
     };
 
-    if (!username) {
+    const removeFromVault = (gameId) => {
+
+        setVault((prev) => prev.filter(game => game.id !== gameId));
+    };
+
+    const updateGameMeta = (gameId, updates) => {
+
+        const isInVault = vault.some((game) => game.id === gameId);
+        if (!isInVault) {
+            return;
+        }
+
+        setGameMetaById((prev) => {
+            const current = prev[gameId] || {};
+            const next = {
+                ...current,
+                ...updates
+            };
+
+            if (!next.status) {
+                delete next.status;
+            }
+
+            if (!next.playtime) {
+                delete next.playtime;
+            }
+
+            const hasValues = Object.keys(next).length > 0;
+
+            if (!hasValues) {
+                const clone = { ...prev };
+                delete clone[gameId];
+                return clone;
+            }
+
+            return {
+                ...prev,
+                [gameId]: next
+            };
+        });
+    };
+
+    if (!account) {
         return (
             <LoginPage
                 onLogin={handleLogin}
@@ -84,7 +341,7 @@ function App() {
                 <Sidebar
                     username={username}
                     currentView={currentView}
-                    setCurrentView={setCurrentView}
+                    setCurrentView={navigateToView}
                     favoritesCount={favorites.length}
                     vaultCount={vault.length}
                     onLogout={handleLogout}
@@ -95,7 +352,9 @@ function App() {
                         <DetailsPage
                             game={selectedGame}
                             username={username}
-                            onBack={() => setSelectedGame(null)}
+                            canTrack={vault.some((game) => game.id === selectedGame.id)}
+                            onUpdateGameMeta={updateGameMeta}
+                            onBack={goBackFromDetails}
                         />
                     ) : (
                         <>
@@ -103,7 +362,7 @@ function App() {
                                 <MobileNav
                                     username={username}
                                     currentView={currentView}
-                                    setCurrentView={setCurrentView}
+                                    setCurrentView={navigateToView}
                                     onLogout={handleLogout}
                                 />
                             </div>
@@ -111,28 +370,32 @@ function App() {
                             {currentView === "home" && (
                                 <HomePage
                                     username={username}
-                                    games={games}
+                                    games={mergedGames}
+                                    favoriteIds={favoriteIds}
+                                    vaultIds={vaultIds}
                                     onAddFavorite={addToFavorites}
                                     onAddVault={addToVault}
-                                    onViewDetails={setSelectedGame}
+                                    onViewDetails={openDetailsView}
                                 />
                             )}
 
                             {currentView === "favorites" && (
                                 <FavoritesPage
                                     favorites={favorites}
-                                    onViewDetails={setSelectedGame}
+                                    onViewDetails={openDetailsView}
                                     onAddFavorite={addToFavorites}
                                     onAddVault={addToVault}
+                                    onRemoveFavorite={removeFromFavorites}
                                 />
                             )}
 
                             {currentView === "vault" && (
                                 <VaultPage
                                     vault={vault}
-                                    onViewDetails={setSelectedGame}
+                                    onViewDetails={openDetailsView}
                                     onAddFavorite={addToFavorites}
                                     onAddVault={addToVault}
+                                    onRemoveVault={removeFromVault}
                                 />
                             )}
                         </>

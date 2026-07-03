@@ -1,9 +1,17 @@
 function GameCard({
     game,
+    isFavorite = false,
+    isInVault = false,
     onAddFavorite,
     onAddVault,
-    onViewDetails
+    onViewDetails,
+    onRemoveFavorite,
+    onRemoveVault,
+    showRemoveFavorite = false,
+    showRemoveVault = false
 }) {
+
+    const genreLabel = (game.genres || [game.genre]).join(" · ");
 
     return (
         <article className="game-card overflow-hidden rounded-4xl border border-slate-800/70 bg-[#0b1830]/95 shadow-[0_22px_60px_-34px_rgba(0,0,0,0.8)] transition duration-300 hover:-translate-y-1 hover:border-cyan-400/40">
@@ -16,7 +24,21 @@ function GameCard({
             <div className="game-card-content space-y-4 p-6">
                 <div className="space-y-2">
                     <h3 className="text-2xl font-semibold text-white">{game.title}</h3>
-                    <p className="text-sm uppercase tracking-[0.25em] text-[#00F5FF]">{game.genre}</p>
+                    <p className="text-sm uppercase tracking-[0.2em] text-[#00F5FF]">{genreLabel}</p>
+                    {(isFavorite || isInVault) && (
+                        <div className="flex flex-wrap gap-2 pt-1 text-[11px] font-semibold uppercase tracking-[0.12em]">
+                            {isFavorite && (
+                                <span className="rounded-full border border-rose-400/40 bg-rose-500/15 px-3 py-1 text-rose-200">
+                                    In Favorites
+                                </span>
+                            )}
+                            {isInVault && (
+                                <span className="rounded-full border border-cyan-400/40 bg-cyan-500/15 px-3 py-1 text-cyan-200">
+                                    In Vault
+                                </span>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 <div className="game-card-meta grid gap-2 text-slate-300 sm:grid-cols-2">
@@ -34,20 +56,43 @@ function GameCard({
                     >
                         Details
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => onAddFavorite(game)}
-                        className="secondary-action-btn rounded-3xl border border-slate-700 bg-slate-950/90 px-4 py-2 text-sm text-slate-100 transition duration-300 hover:bg-slate-800"
-                    >
-                        ❤️ Favorite
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => onAddVault(game)}
-                        className="secondary-action-btn rounded-3xl border border-slate-700 bg-slate-950/90 px-4 py-2 text-sm text-slate-100 transition duration-300 hover:bg-slate-800"
-                    >
-                        📚 Vault
-                    </button>
+                    {showRemoveFavorite ? (
+                        <button
+                            type="button"
+                            onClick={() => onRemoveFavorite(game.id)}
+                            className="secondary-action-btn rounded-3xl border border-rose-400/40 bg-rose-500/10 px-4 py-2 text-sm text-rose-200 transition duration-300 hover:bg-rose-500/20"
+                        >
+                            Remove Favorite
+                        </button>
+                    ) : (
+                        <button
+                            type="button"
+                            onClick={() => onAddFavorite(game)}
+                            disabled={isFavorite}
+                            className="secondary-action-btn rounded-3xl border border-slate-700 bg-slate-950/90 px-4 py-2 text-sm text-slate-100 transition duration-300 hover:bg-slate-800 disabled:cursor-not-allowed disabled:border-rose-500/30 disabled:bg-rose-500/10 disabled:text-rose-200"
+                        >
+                            {isFavorite ? "In Favorites" : "❤️ Favorite"}
+                        </button>
+                    )}
+
+                    {showRemoveVault ? (
+                        <button
+                            type="button"
+                            onClick={() => onRemoveVault(game.id)}
+                            className="secondary-action-btn rounded-3xl border border-rose-400/40 bg-rose-500/10 px-4 py-2 text-sm text-rose-200 transition duration-300 hover:bg-rose-500/20"
+                        >
+                            Remove Vault
+                        </button>
+                    ) : (
+                        <button
+                            type="button"
+                            onClick={() => onAddVault(game)}
+                            disabled={isInVault}
+                            className="secondary-action-btn rounded-3xl border border-slate-700 bg-slate-950/90 px-4 py-2 text-sm text-slate-100 transition duration-300 hover:bg-slate-800 disabled:cursor-not-allowed disabled:border-cyan-500/30 disabled:bg-cyan-500/10 disabled:text-cyan-200"
+                        >
+                            {isInVault ? "In Vault" : "📚 Vault"}
+                        </button>
+                    )}
                 </div>
             </div>
         </article>

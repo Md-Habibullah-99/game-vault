@@ -8,6 +8,8 @@ import GameCard from "../components/GameCard";
 function HomePage({
     username,
     games,
+    favoriteIds,
+    vaultIds,
     onAddFavorite,
     onAddVault,
     onViewDetails
@@ -28,6 +30,16 @@ function HomePage({
         setSelectedStatus
     ] = useState("All");
 
+    const genres =
+        Array.from(
+            new Set(
+                games.flatMap((game) => game.genres || [game.genre])
+            )
+        ).sort();
+
+    const statuses =
+        Array.from(new Set(games.map((game) => game.status).filter(Boolean))).sort();
+
     const filteredGames =
         games.filter(game => {
 
@@ -42,8 +54,7 @@ function HomePage({
             const matchesGenre =
                 selectedGenre === "All"
                 ||
-                game.genre ===
-                selectedGenre;
+                (game.genres || [game.genre]).includes(selectedGenre);
 
             const matchesStatus =
                 selectedStatus === "All"
@@ -71,6 +82,8 @@ function HomePage({
                 />
 
                 <FilterBar
+                    genres={genres}
+                    statuses={statuses}
                     selectedGenre={selectedGenre}
                     setSelectedGenre={setSelectedGenre}
                     selectedStatus={selectedStatus}
@@ -83,6 +96,8 @@ function HomePage({
                     <GameCard
                         key={game.id}
                         game={game}
+                        isFavorite={favoriteIds.has(game.id)}
+                        isInVault={vaultIds.has(game.id)}
                         onAddFavorite={onAddFavorite}
                         onAddVault={onAddVault}
                         onViewDetails={onViewDetails}

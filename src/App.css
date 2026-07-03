@@ -564,17 +564,6 @@
   transform: translateY(-1px);
 }
 
-.sidebar-logout-btn {
-  letter-spacing: 0.01em;
-}
-
-.sidebar-logout-btn:hover {
-  background: rgba(244, 63, 94, 0.2);
-  color: #ffe4e6;
-  border-color: rgba(251, 113, 133, 0.45);
-}
-
-.sidebar-logout-btn:focus-visible,
 .mobile-logout-btn:focus-visible {
   outline: 2px solid rgba(251, 113, 133, 0.55);
   outline-offset: 2px;

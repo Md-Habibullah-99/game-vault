@@ -4,7 +4,8 @@ function FavoritesPage({
     favorites,
     onViewDetails,
     onAddFavorite,
-    onAddVault
+    onAddVault,
+    onRemoveFavorite
 }) {
 
     return (
@@ -30,6 +31,8 @@ function FavoritesPage({
                                 onViewDetails={onViewDetails}
                                 onAddFavorite={onAddFavorite}
                                 onAddVault={onAddVault}
+                                onRemoveFavorite={onRemoveFavorite}
+                                showRemoveFavorite
                             />
 
                         ))

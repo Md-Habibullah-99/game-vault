@@ -63,9 +63,21 @@ function Sidebar({
                 <button
                     type="button"
                     onClick={onLogout}
-                    className="sidebar-logout-btn w-full rounded-2xl border border-rose-400/30 bg-rose-500/10 px-3 py-2 text-sm font-medium text-rose-200 transition"
+                    className="group w-full rounded-2xl border border-slate-600/70 bg-slate-900/85 px-4 py-3 text-left text-slate-100 transition duration-200 hover:border-rose-300/60 hover:bg-rose-500/12 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300/45"
                 >
-                    Sign out
+                    <span className="flex items-center justify-between gap-3">
+                        <span className="inline-flex items-center gap-2">
+                            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-rose-500/20 text-rose-200" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                                    <path d="M10 17l5-5-5-5" />
+                                    <path d="M15 12H3" />
+                                </svg>
+                            </span>
+                            <span className="text-sm font-semibold tracking-[0.02em]">Sign out</span>
+                        </span>
+                        
+                    </span>
                 </button>
             </div>
         </aside>

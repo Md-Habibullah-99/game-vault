@@ -1,43 +1,111 @@
-# GameVault
+# 🎮 GameVault
 
-A personal gaming hub for discovering titles, building a library, and tracking favorites — built with React and Vite, styled with Tailwind CSS.
+<div align="center">
 
-**Live demo:** [shahnur07.github.io/game-vault](https://shahnur07.github.io/game-vault/)
+### Your Personal Gaming Hub
+
+Discover games, build your collection, track favorites, and share reviews — all in one place.
+
+Built with **React**, **Vite**, and **Tailwind CSS**.
+
+![React](https://img.shields.io/badge/React-19-blue?logo=react)
+![Vite](https://img.shields.io/badge/Vite-Frontend-purple?logo=vite)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4-38BDF8?logo=tailwindcss)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Status](https://img.shields.io/badge/Status-Active-success)
+
+### 🌐 Live Demo
+
+**https://shahnur07.github.io/game-vault/**
+
+</div>
 
 ---
 
-## Overview
+## 📖 About The Project
 
-GameVault is a single-page application for browsing a game catalog, viewing rich detail pages (system requirements, critic/user scores, platform availability), and curating a personal collection across two lists — **Vault** and **Favorites**. Users can also leave star ratings and written reviews on individual game pages.
+GameVault is a modern single-page application designed for gamers who want a clean and organized way to discover games and manage their personal collection.
 
-## Features
+Users can browse a curated game catalog, explore detailed game pages, save titles to their personal vault, mark favorites, and leave ratings and reviews for the community.
 
-- **Discover** — browse the full catalog with live search and filtering by genre and play status
-- **Game details** — a dedicated page per title with description, system requirements, platform availability, and aggregate review data
-- **User reviews** — rate a game out of 10 and leave a comment; ratings roll up into a Positive / Mixed / Negative distribution summary
-- **Personal Vault** — save games to a private library for later
-- **Favorites** — shortlist standout titles separately from the Vault
-- **Responsive layout** — a sidebar navigation on desktop that collapses into a bottom mobile nav on smaller screens
-- **Account session** — username-based sign-in with a sign-out action available from both desktop and mobile navigation
+The project was built as a portfolio application to showcase frontend development skills using modern React practices and responsive UI design.
 
-## Tech Stack
+---
 
-| Layer | Choice |
-|---|---|
-| UI library | [React](https://react.dev/) |
-| Build tool | [Vite](https://vitejs.dev/) |
-| Styling | [Tailwind CSS v4](https://tailwindcss.com/) + custom CSS (`app.css`) |
-| Fonts | Inter (body), Barlow Condensed (display/headings) |
-| Hosting | GitHub Pages |
+## ✨ Features
 
-> **Note on data persistence:** if your build wires up `localStorage` (or another storage layer) to persist the Vault and Favorites lists across sessions, document that here — including what's stored and any limitations (e.g., data is device/browser-specific and isn't synced across devices).
+### 🔍 Discover Games
 
-## Project Structure
+* Browse the complete game library
+* Real-time search functionality
+* Filter games by genre
+* Filter by play status
 
-```
+### 📄 Detailed Game Pages
+
+Each game includes:
+
+* Description and overview
+* Platform availability
+* System requirements
+* Critic and user scores
+* Review summaries
+
+### ⭐ Review System
+
+* Rate games out of 10
+* Leave written reviews
+* Community sentiment analysis:
+
+  * Positive
+  * Mixed
+  * Negative
+
+### 🏛 Personal Vault
+
+* Save games for later
+* Build your own gaming library
+* Quickly access saved titles
+
+### ❤️ Favorites
+
+* Keep track of your all-time favorite games
+* Separate from your main collection
+
+### 📱 Fully Responsive Design
+
+* Desktop sidebar navigation
+* Mobile bottom navigation bar
+* Optimized experience across all devices
+
+### 👤 Session Management
+
+* Username-based login system
+* Persistent user sessions
+* Quick sign-out functionality
+
+---
+
+## 🛠 Tech Stack
+
+| Category         | Technology              |
+| ---------------- | ----------------------- |
+| Frontend         | React                   |
+| Build Tool       | Vite                    |
+| Styling          | Tailwind CSS v4         |
+| State Management | React Hooks             |
+| Fonts            | Inter, Barlow Condensed |
+| Deployment       | GitHub Pages            |
+
+---
+
+## 📂 Project Structure
+
+```text
 game-vault/
 ├── public/
 │   └── gameVaultIcon.svg
+│
 ├── src/
 │   ├── components/
 │   │   ├── GameCard.jsx
@@ -48,95 +116,176 @@ game-vault/
 │   │   ├── SidebarBtn.jsx
 │   │   ├── MobileNav.jsx
 │   │   └── ReviewCard.jsx
+│   │
 │   ├── pages/
 │   │   ├── HomePage.jsx
 │   │   ├── DetailsPage.jsx
 │   │   ├── VaultPage.jsx
 │   │   ├── FavoritesPage.jsx
 │   │   └── LoginPage.jsx
+│   │
 │   ├── icons.jsx
 │   ├── App.jsx
 │   ├── app.css
 │   ├── index.css
 │   └── main.jsx
+│
 ├── index.html
 ├── vite.config.js
-└── package.json
+├── package.json
+└── README.md
 ```
 
-> Adjust this tree if your actual file layout differs — it reflects the components and pages currently in the project.
+---
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18 or later recommended)
-- npm (bundled with Node.js)
+Make sure you have installed:
+
+* Node.js (v18 or later recommended)
+* npm
 
 ### Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/shahnur07/game-vault.git
-   ```
+Clone the repository:
 
-2. Navigate into the project directory:
-   ```bash
-   cd game-vault
-   ```
+```bash
+git clone https://github.com/shahnur07/game-vault.git
+```
 
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
+Move into the project directory:
 
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
+```bash
+cd game-vault
+```
 
-5. Open [http://localhost:5173](http://localhost:5173) in your browser.
+Install dependencies:
 
-### Building for Production
+```bash
+npm install
+```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Open your browser and visit:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## 📦 Production Build
+
+Create an optimized production build:
 
 ```bash
 npm run build
 ```
 
-The optimized output is written to the `dist/` directory. Preview it locally with:
+Preview the production build locally:
 
 ```bash
 npm run preview
 ```
 
-## Deployment
+The generated files will be available in:
 
-This project is configured for GitHub Pages via the `base: '/game-vault/'` setting in `vite.config.js`. After running `npm run build`, deploy the contents of `dist/` to the `gh-pages` branch (manually, or with a tool such as [`gh-pages`](https://www.npmjs.com/package/gh-pages)) to publish updates to the live site.
+```text
+dist/
+```
 
-## Roadmap
+---
 
-Ideas for future iterations:
+## 🌍 Deployment
 
-- [ ] Persist Vault/Favorites to an account rather than per-device storage
-- [ ] Pagination or infinite scroll for large catalogs
-- [ ] Sort controls (rating, release year, alphabetical) on Discover, Vault, and Favorites
-- [ ] Editing or deleting a previously submitted review
+GameVault is configured for deployment on **GitHub Pages** using:
 
-## Contributing
+```js
+base: "/game-vault/"
+```
 
-Contributions are welcome. To propose a change:
+To deploy:
+
+```bash
+npm run build
+```
+
+Publish the generated `dist` folder contents to the `gh-pages` branch.
+
+---
+
+## 🗺 Future Improvements
+
+Planned features for future versions:
+
+* [ ] Cloud synchronization across devices
+* [ ] User accounts and authentication
+* [ ] Infinite scrolling or pagination
+* [ ] Advanced sorting options
+* [ ] Edit or delete reviews
+* [ ] Dark/Light theme toggle
+* [ ] Game recommendations
+* [ ] Wishlist support
+* [ ] Achievement tracking
+* [ ] Recently played section
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome.
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature-name`)
-3. Commit your changes with a clear message
-4. Open a pull request describing what changed and why
+2. Create a new branch
 
-For larger or structural changes, please open an issue first to discuss the approach before submitting a pull request.
+```bash
+git checkout -b feature/amazing-feature
+```
 
-## License
+3. Commit your changes
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for the full text.
+```bash
+git commit -m "Add amazing feature"
+```
 
-## Author
+4. Push your branch
 
-Built and maintained by [shahnur07](https://github.com/shahnur07).
+```bash
+git push origin feature/amazing-feature
+```
+
+5. Open a Pull Request
+
+For major changes, please open an issue first to discuss the proposed improvements.
+
+---
+
+## 📜 License
+
+Distributed under the MIT License.
+
+See the `LICENSE` file for more information.
+
+---
+
+## 👨‍💻 Author
+
+**Shahnur Islam**
+
+* GitHub: https://github.com/shahnur07
+* Project: GameVault
+
+---
+
+<div align="center">
+
+### ⭐ If you like this project, consider giving it a star!
+
+</div>

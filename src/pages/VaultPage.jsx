@@ -4,7 +4,8 @@ function VaultPage({
     vault,
     onViewDetails,
     onAddFavorite,
-    onAddVault
+    onAddVault,
+    onRemoveVault
 }) {
 
     return (
@@ -30,6 +31,8 @@ function VaultPage({
                                 onViewDetails={onViewDetails}
                                 onAddFavorite={onAddFavorite}
                                 onAddVault={onAddVault}
+                                onRemoveVault={onRemoveVault}
+                                showRemoveVault
                             />
 
                         ))

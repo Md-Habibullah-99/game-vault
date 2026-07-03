@@ -1,13 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReviewCard from "../components/ReviewCard";
 import "./DetailsPage.css";
 
-function DetailsPage({ game, username, onBack }) {
+const STATUS_OPTIONS = ["Played", "Playing", "Wishlist"];
+
+function DetailsPage({ game, username, canTrack, onBack, onUpdateGameMeta }) {
     const [reviews, setReviews] = useState(game.reviews || []);
     const [comment, setComment] = useState("");
     const [rating, setRating] = useState(10);
 
-    const platforms = game.platform.split("/").map((item) => item.trim());
+    const [status, setStatus] = useState(game.status || "Wishlist");
+    const [playtime, setPlaytime] = useState(game.playtime || "");
+    const [saveNote, setSaveNote] = useState("");
+
+    useEffect(() => {
+        setStatus(game.status || "Wishlist");
+        setPlaytime(game.playtime || "");
+        setSaveNote("");
+    }, [game]);
+
+    const platforms = (game.platforms || game.platform || "")
+        .toString()
+        .split(/\/|,/)
+        .map((item) => item.trim())
+        .filter(Boolean);
+    const genreLabel = (game.genres || [game.genre]).join(" · ");
 
     const averageUserScore =
         reviews.length > 0
@@ -53,6 +70,21 @@ function DetailsPage({ game, username, onBack }) {
         setRating(10);
     };
 
+    const savePreferences = () => {
+        if (!canTrack) {
+            return;
+        }
+
+        const cleanedPlaytime = playtime.trim();
+
+        onUpdateGameMeta(game.id, {
+            status,
+            playtime: cleanedPlaytime
+        });
+
+        setSaveNote("Saved");
+    };
+
     return (
         <div className="dp">
             <button onClick={onBack} className="dp-back">
@@ -75,7 +107,7 @@ function DetailsPage({ game, username, onBack }) {
 
                 <div className="dp-hero-content">
                     <p className="dp-eyebrow">
-                        {game.genre} · {game.year}
+                        {genreLabel} · {game.year}
                     </p>
                     <h1 className="dp-title">{game.title}</h1>
                     <p className="dp-tagline">{game.description}</p>
@@ -171,7 +203,7 @@ function DetailsPage({ game, username, onBack }) {
                         </div>
                         <div>
                             <dt>Genre</dt>
-                            <dd>{game.genre}</dd>
+                            <dd>{genreLabel}</dd>
                         </div>
                         <div>
                             <dt>ESRB rating</dt>
@@ -185,13 +217,61 @@ function DetailsPage({ game, username, onBack }) {
 
                     <div className="dp-rail-divider" />
 
+                    <p className="dp-rail-heading">My tracking</p>
+
+                    {canTrack ? (
+                        <div className="dp-edit-grid">
+                            <label className="dp-edit-label" htmlFor="game-status">
+                                Status
+                            </label>
+                            <select
+                                id="game-status"
+                                value={status}
+                                onChange={(event) => setStatus(event.target.value)}
+                                className="dp-edit-input"
+                            >
+                                {STATUS_OPTIONS.map((option) => (
+                                    <option key={option} value={option}>{option}</option>
+                                ))}
+                            </select>
+
+                            <label className="dp-edit-label" htmlFor="game-playtime">
+                                Playtime
+                            </label>
+                            <input
+                                id="game-playtime"
+                                type="text"
+                                value={playtime}
+                                onChange={(event) => setPlaytime(event.target.value)}
+                                className="dp-edit-input"
+                                placeholder="e.g. 48h"
+                            />
+
+                            <button type="button" className="dp-save-btn" onClick={savePreferences}>
+                                Save tracking
+                            </button>
+
+                            {saveNote && <p className="dp-save-note">{saveNote}</p>}
+                        </div>
+                    ) : (
+                        <p className="dp-track-note">
+                            Add this game to your Vault to unlock tracking options.
+                        </p>
+                    )}
+
+                    <div className="dp-rail-divider" />
+
                     <p className="dp-rail-heading">Available on</p>
                     <div className="dp-platform-chips">
-                        {platforms.map((platform) => (
-                            <span key={platform} className="dp-platform-chip">
-                                {platform}
-                            </span>
-                        ))}
+                        {platforms.length === 0 ? (
+                            <span className="dp-platform-chip">No platform set</span>
+                        ) : (
+                            platforms.map((platform) => (
+                                <span key={platform} className="dp-platform-chip">
+                                    {platform}
+                                </span>
+                            ))
+                        )}
                     </div>
                 </aside>
             </section>
