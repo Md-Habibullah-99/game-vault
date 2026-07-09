@@ -25,6 +25,9 @@ function DetailsPage({ game, username, canTrack, onBack, onUpdateGameMeta }) {
         .map((item) => item.trim())
         .filter(Boolean);
     const genreLabel = (game.genres || [game.genre]).join(" · ");
+    const trailerUrl = game.trailerId
+        ? `https://www.youtube.com/embed/${game.trailerId}?autoplay=1&mute=1&rel=0&modestbranding=1`
+        : "";
 
     const averageUserScore =
         reviews.length > 0
@@ -158,6 +161,23 @@ function DetailsPage({ game, username, canTrack, onBack, onUpdateGameMeta }) {
                         <h2 className="dp-heading">About this game</h2>
                         <p className="dp-body-text">{game.description}</p>
                     </section>
+
+                    {trailerUrl && (
+                        <section className="dp-panel dp-trailer-panel">
+                            <div className="dp-panel-heading-row">
+                                <h2 className="dp-heading">Official trailer</h2>
+                                <span className="dp-trailer-source">YouTube</span>
+                            </div>
+                            <div className="dp-trailer-frame">
+                                <iframe
+                                    src={trailerUrl}
+                                    title={`${game.title} trailer`}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowFullScreen
+                                />
+                            </div>
+                        </section>
+                    )}
 
                     <section className="dp-panel">
                         <h2 className="dp-heading">System requirements</h2>

@@ -218,6 +218,47 @@
     padding: 24px 28px;
 }
 
+.dp-panel-heading-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.dp-panel-heading-row .dp-heading {
+    margin: 0;
+}
+
+.dp-trailer-source {
+    border: 1px solid rgba(91, 141, 239, 0.35);
+    border-radius: 999px;
+    background: rgba(91, 141, 239, 0.12);
+    color: #bcd3ff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+}
+
+.dp-trailer-frame {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--dp-border);
+    border-radius: 10px;
+    background: #05070b;
+    aspect-ratio: 16 / 9;
+}
+
+.dp-trailer-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
 .dp-heading {
     font-family: "Barlow Condensed", sans-serif;
     font-weight: 700;

@@ -454,6 +454,29 @@ const GENRE_ALIASES = {
   "Rogue-like": ["Action", "Rogue-like"]
 };
 
+const TRAILER_IDS = {
+  "Far Cry 3": "J6gnOVJsCsM",
+  "Cyberpunk 2077": "8X2kIfS6fb8",
+  "God of War": "K0u_kAWLJOA",
+  "Elden Ring": "E3Huy2cdih0",
+  "Red Dead Redemption 2": "eaW0tYpxyp0",
+  "Spider-Man Remastered": "1E051WtpyWg",
+  "Resident Evil Village": "btFclZUXpzA",
+  "Doom Eternal": "_UuktemkCFI",
+  "Minecraft": "MmB9b5njVbA",
+  "Forza Horizon 5": "FYH9n37B7Yw",
+  "The Last of Us Part I": "R2Ebc_OFeug",
+  "Assassin's Creed Valhalla": "ssrNcwxALS4",
+  "Valorant": "e_E9W2vsRbQ",
+  "Ghost of Tsushima": "iqysmS4lxwQ",
+  "Apex Legends": "oQtHENM_GZU",
+  "Sekiro: Shadows Die Twice": "rXMX4YJ7Lks",
+  "The Witcher 3": "c0i88t0Kacs",
+  "Battlefield 2042": "ASzOzrB-a9E",
+  "Hades": "mD8x5xLHRho",
+  "Starfield": "pYqyVpCV-3c"
+};
+
 function normalizeGenres(genre) {
   const mapped = GENRE_ALIASES[genre] || [genre];
   return [...new Set(mapped)];
@@ -465,6 +488,7 @@ export const games = rawGames.map((game) => {
   return {
     ...game,
     genre: genres[0],
-    genres
+    genres,
+    trailerId: TRAILER_IDS[game.title]
   };
 });

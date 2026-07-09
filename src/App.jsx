@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 import FavoritesPage from "./pages/FavoritesPage";
 import VaultPage from "./pages/VaultPage";
 import DetailsPage from "./pages/DetailsPage";
+import EventsPage from "./pages/EventsPage";
 import { games } from "./data/games";
 import {
     clearSessionUser,
@@ -397,6 +398,10 @@ function App() {
                                     onAddVault={addToVault}
                                     onRemoveVault={removeFromVault}
                                 />
+                            )}
+
+                            {currentView === "events" && (
+                                <EventsPage />
                             )}
                         </>
                     )}

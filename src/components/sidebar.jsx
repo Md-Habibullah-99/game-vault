@@ -1,3 +1,5 @@
+import { FaCalendarDays } from "react-icons/fa6";
+
 import SidebarBtn from "./SidebarBtn";
 
 function Sidebar({
@@ -27,6 +29,11 @@ function Sidebar({
             key: "favorites",
             label: `Favorites (${favoritesCount})`,
             icon: "❤️"
+        },
+        {
+            key: "events",
+            label: "Events",
+            icon: <FaCalendarDays />
         }
     ];
 
@@ -76,7 +83,6 @@ function Sidebar({
                             </span>
                             <span className="text-sm font-semibold tracking-[0.02em]">Sign out</span>
                         </span>
-                        
                     </span>
                 </button>
             </div>
