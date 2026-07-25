@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import Sidebar from "./components/sidebar";
 import MobileNav from "./components/MobileNav";
+import Header from "./components/header";
+import WelcomeToast from "./components/WelcomeToast";
 
 import HomePage from "./pages/HomePage";
 import FavoritesPage from "./pages/FavoritesPage";
@@ -61,6 +63,21 @@ function App() {
     const [metaLoaded, setMetaLoaded] =
         useState(false);
 
+    const [sidebarCollapsed, setSidebarCollapsed] =
+        useState(false);
+
+    const [showWelcomeToast, setShowWelcomeToast] =
+        useState(false);
+
+    const [searchTerm, setSearchTerm] =
+        useState("");
+
+    const [selectedGenre, setSelectedGenre] =
+        useState("All");
+
+    const [selectedStatus, setSelectedStatus] =
+        useState("All");
+
     const username = useMemo(
         () => account?.displayName || account?.username || "",
         [account]
@@ -77,6 +94,37 @@ function App() {
             };
         }),
         [gameMetaById]
+    );
+
+    const genres = useMemo(
+        () => Array.from(
+            new Set(mergedGames.flatMap((game) => game.genres || [game.genre]))
+        ).sort(),
+        [mergedGames]
+    );
+
+    const statuses = useMemo(
+        () => Array.from(
+            new Set(mergedGames.map((game) => game.status).filter(Boolean))
+        ).sort(),
+        [mergedGames]
+    );
+
+    const filteredGames = useMemo(
+        () => mergedGames.filter((game) => {
+            const matchesSearch = game.title
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase());
+
+            const matchesGenre = selectedGenre === "All"
+                || (game.genres || [game.genre]).includes(selectedGenre);
+
+            const matchesStatus = selectedStatus === "All"
+                || (game.status && game.status === selectedStatus);
+
+            return matchesSearch && matchesGenre && matchesStatus;
+        }),
+        [mergedGames, searchTerm, selectedGenre, selectedStatus]
     );
 
     const favoriteIds = useMemo(
@@ -249,6 +297,17 @@ function App() {
         }
     }, [mergedGames, selectedGame?.id]);
 
+    useEffect(() => {
+        if (!account?.username) {
+            return undefined;
+        }
+
+        setShowWelcomeToast(true);
+        const hideTimer = setTimeout(() => setShowWelcomeToast(false), 1000);
+
+        return () => clearTimeout(hideTimer);
+    }, [account?.username]);
+
     const handleLogin = (loggedInAccount) => {
 
         setAccount(loggedInAccount);
@@ -338,6 +397,8 @@ function App() {
 
     return (
         <div className="min-h-screen bg-[#050710] text-slate-100">
+            <WelcomeToast show={showWelcomeToast} />
+
             <div className="flex min-h-screen w-full flex-col gap-6 px-3 py-4 sm:px-4 sm:py-6 lg:flex-row lg:px-10 lg:py-8">
                 <Sidebar
                     username={username}
@@ -346,20 +407,30 @@ function App() {
                     favoritesCount={favorites.length}
                     vaultCount={vault.length}
                     onLogout={handleLogout}
+                    collapsed={sidebarCollapsed}
+                    onToggleCollapsed={() => setSidebarCollapsed((collapsed) => !collapsed)}
+                    genres={genres}
+                    statuses={statuses}
+                    selectedGenre={selectedGenre}
+                    setSelectedGenre={setSelectedGenre}
+                    selectedStatus={selectedStatus}
+                    setSelectedStatus={setSelectedStatus}
                 />
 
-                <main className="flex-1 min-w-0 rounded-3xl border border-slate-800/80 bg-[#091428]/90 p-4 shadow-[0_30px_90px_-42px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:rounded-4xl sm:p-6">
+                <main className="flex-1 min-w-0 space-y-6">
                     {selectedGame ? (
-                        <DetailsPage
-                            game={selectedGame}
-                            username={username}
-                            canTrack={vault.some((game) => game.id === selectedGame.id)}
-                            onUpdateGameMeta={updateGameMeta}
-                            onBack={goBackFromDetails}
-                        />
+                        <div className="rounded-3xl border border-slate-800/80 bg-[#091428]/90 p-4 shadow-[0_30px_90px_-42px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:rounded-4xl sm:p-6">
+                            <DetailsPage
+                                game={selectedGame}
+                                username={username}
+                                canTrack={vault.some((game) => game.id === selectedGame.id)}
+                                onUpdateGameMeta={updateGameMeta}
+                                onBack={goBackFromDetails}
+                            />
+                        </div>
                     ) : (
                         <>
-                            <div className="mb-6 xl:hidden">
+                            <div className="xl:hidden">
                                 <MobileNav
                                     username={username}
                                     currentView={currentView}
@@ -368,10 +439,18 @@ function App() {
                                 />
                             </div>
 
+                            <Header
+                                currentView={currentView}
+                                searchTerm={searchTerm}
+                                setSearchTerm={setSearchTerm}
+                                showSearch={currentView === "home"}
+                            />
+
+                            <div className="rounded-3xl border border-slate-800/80 bg-[#091428]/90 p-4 shadow-[0_30px_90px_-42px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:rounded-4xl sm:p-6">
                             {currentView === "home" && (
                                 <HomePage
                                     username={username}
-                                    games={mergedGames}
+                                    games={filteredGames}
                                     favoriteIds={favoriteIds}
                                     vaultIds={vaultIds}
                                     onAddFavorite={addToFavorites}
@@ -403,6 +482,7 @@ function App() {
                             {currentView === "events" && (
                                 <EventsPage />
                             )}
+                            </div>
                         </>
                     )}
                 </main>
